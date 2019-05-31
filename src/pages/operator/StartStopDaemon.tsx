@@ -89,6 +89,7 @@ interface IState {
 
 class StartStopDaemon extends Component<IProps, IState> {
     timer: any;
+    userAddress: string = '';
 
     state = {
         loading: false,
@@ -104,25 +105,23 @@ class StartStopDaemon extends Component<IProps, IState> {
 
     handleButtonClick = async () => {
         this.setState({ loading: true });
-        console.log('handlebuttonclick')
         const { network, daemonEndpoint } = this.props;
         const { daemonRunning } = this.state;
         let commandRequest: CommandRequest = new CommandRequest();
-        console.log('calling userAddress');
-        let userAddress: string = await network.getAccount();
-        console.log('userAddress', userAddress);
-        console.log('calling blocknumber')
+        
+        if (this.userAddress === '') { this.userAddress = await network.getAccount(); };
         let currentBlockNumber: number = await network.getCurrentBlockNumber();
-        console.log('blocknumber', currentBlockNumber);
+        let command = daemonRunning ? 1 : 0; // 1 - Stop Request, 0 - Start Request
 
+        commandRequest.setUserAddress(this.userAddress)
         commandRequest.setCurrentBlock(currentBlockNumber);
-        let command = daemonRunning ? 1 : 0;
-        commandRequest.setCommand(1); //Stop Request
-        console.log('commandRequest', commandRequest);
+        commandRequest.setCommand(command);
+
         let msg: string = network.composeSHA3Message(
             ['string', 'uint256', 'address'],
-            ['_Request_Read', currentBlockNumber, userAddress]);
-        network.eth.personal_sign(msg, userAddress)
+            ['_Request_Read', currentBlockNumber, this.userAddress]);
+
+        network.eth.personal_sign(msg, this.userAddress)
             .then((signed: any) => {
                 let signature = network.buffSignature(signed);
                 commandRequest.setSignature(signature);

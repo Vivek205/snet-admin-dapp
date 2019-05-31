@@ -1,10 +1,12 @@
-interface Window{
-    web3:any;
-    ethjs:any;
+interface Window {
+  web3: any;
+  ethjs: any;
 }
 
 declare namespace JSX {
-    interface ElementClass {
-      render: any;
-    }
+  interface ElementClass {
+    render: any;
   }
+}
+
+declare module 'ethjs';

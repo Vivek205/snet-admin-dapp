@@ -12,6 +12,9 @@ export class ReadRequest extends jspb.Message {
   getCurrentBlock(): number;
   setCurrentBlock(value: number): void;
 
+  getUserAddress(): string;
+  setUserAddress(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReadRequest.AsObject;
   static toObject(includeInstance: boolean, msg: ReadRequest): ReadRequest.AsObject;
@@ -26,6 +29,7 @@ export namespace ReadRequest {
   export type AsObject = {
     signature: Uint8Array | string,
     currentBlock: number,
+    userAddress: string,
   }
 }
 
@@ -67,6 +71,9 @@ export class UpdateRequest extends jspb.Message {
   getCurrentBlock(): number;
   setCurrentBlock(value: number): void;
 
+  getUserAddress(): string;
+  setUserAddress(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateRequest): UpdateRequest.AsObject;
@@ -82,6 +89,7 @@ export namespace UpdateRequest {
     signature: Uint8Array | string,
     updatedConfigurationList: Array<NameValue.AsObject>,
     currentBlock: number,
+    userAddress: string,
   }
 }
 
@@ -96,6 +104,9 @@ export class CommandRequest extends jspb.Message {
 
   getCurrentBlock(): number;
   setCurrentBlock(value: number): void;
+
+  getUserAddress(): string;
+  setUserAddress(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CommandRequest.AsObject;
@@ -112,6 +123,7 @@ export namespace CommandRequest {
     signature: Uint8Array | string,
     command: StartStop,
     currentBlock: number,
+    userAddress: string,
   }
 }
 

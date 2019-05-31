@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import SectionMenu from './SectionMenu';
 
@@ -15,6 +14,7 @@ import StartStopDaemon from './StartStopDaemon';
 // Generated STUB Imports
 import { ConfigurationService } from '../../protos/config/config_pb_service';
 import { CommandRequest, ConfigurationResponse, ReadRequest, Response, UpdateRequest, ConfigurationParameter } from '../../protos/config/config_pb';
+import { NameValue } from '../../protos/config/config_pb';
 
 // MaterialUI Imports
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -72,6 +72,8 @@ const styles = (theme: Theme) => createStyles({
 
 class Operator extends Component<IProps, IState> {
     channelHelper = new ChannelHelper();
+    userAddress: string = '';
+    currentBlockNumber: number = 0;
 
     state = {
         activeSection: 'general',
@@ -99,18 +101,19 @@ class Operator extends Component<IProps, IState> {
         let sections: string[] = [];
         let configs: any = {};
         const readRequest: ReadRequest = new ReadRequest();
-        let userAddress: string = '';
-        let currentBlockNumber: number = 0;
+        // let userAddress: string = '';
+        // let currentBlockNumber: number = 0;
 
-        userAddress = await network.getAccount();
-        currentBlockNumber = await network.getCurrentBlockNumber();
-        readRequest.setCurrentBlock(currentBlockNumber);
+        this.userAddress = await network.getAccount();
+        this.currentBlockNumber = await network.getCurrentBlockNumber();
+        readRequest.setCurrentBlock(this.currentBlockNumber);
+        readRequest.setUserAddress(this.userAddress);
 
         let msg = network.composeSHA3Message(
             ['string', 'uint256', 'address'],
-            ['_Request_Read', currentBlockNumber, userAddress]);
+            ['_Request_Read', this.currentBlockNumber, this.userAddress]);
 
-        network.eth.personal_sign(msg, userAddress)
+        network.eth.personal_sign(msg, this.userAddress)
             .then((signed: string) => {
                 console.log('metamask signature', signed);
                 let signature = network.buffSignature(signed);
@@ -158,34 +161,50 @@ class Operator extends Component<IProps, IState> {
     }
 
     //Have to be typed properly
-    updateConfigDetails = (submitArr: any[]) => {
-        const updateRequest: any = submitArr;
-        try {
-            grpc.invoke(ConfigurationService.UpdateConfiguration, {
-                request: updateRequest,
-                host: this.state.daemonEndpoint,
-                onMessage: (message: ConfigurationResponse) => {
-                    console.log('length of response', message);
+    updateConfigDetails = async (submitArr: NameValue[]) => {
+        const { network } = this.props;
+        const updateRequest: UpdateRequest = new UpdateRequest();
+        this.currentBlockNumber = await network.getCurrentBlockNumber();
+        
+        updateRequest.setUpdatedConfigurationList(submitArr);
+        updateRequest.setUserAddress(this.userAddress);
+        updateRequest.setCurrentBlock(this.currentBlockNumber);
 
+        let msg = network.composeSHA3Message(
+            ['string', 'uint256', 'address'],
+            ['_Request_Update', this.currentBlockNumber, this.userAddress]);
 
-                },
-                onEnd: (code: Code, msg: string | undefined, trailers: grpc.Metadata) => {
-                    console.log('end', '--code', code, '--msg', msg, '--trailers', trailers);
+        network.eth.personal_sign(msg, this.userAddress)
+            .then((signed: string) => {
+                let signature = network.buffSignature(signed);
+                updateRequest.setSignature(signature);
+                try {
+                    grpc.invoke(ConfigurationService.UpdateConfiguration, {
+                        request: updateRequest,
+                        host: this.state.daemonEndpoint,
+                        onMessage: (message: ConfigurationResponse) => {
+                            console.log('length of response', message);
+                        },
+                        onEnd: (code: Code, msg: string | undefined, trailers: grpc.Metadata) => {
+                            console.log('end', '--code', code, '--msg', msg, '--trailers', trailers);
+                        }
+                    })
+                } catch (err) {
+                    this.setState({ showError: true });
+                    console.log('Err: UpdateConfigDetails', err);
                 }
             })
-        } catch (err) {
-            this.setState({ showError: true });
-            console.log('Err: UpdateConfigDetails', err);
-        }
+            .catch((error: string) => {
+                console.log(error);
+            })
     }
 
     handleSubmit = (editedConfigs: stringObject): void => {
-        let submitArr: any[] = [];
+        let submitArr: NameValue[] = [];
         Object.entries(editedConfigs).forEach(([key, value]) => {
-            let nameValue = {
-                name: key,
-                value
-            }
+            let nameValue: NameValue = new NameValue();
+            nameValue.setName(key);
+            nameValue.setValue(value);
             submitArr.push(nameValue);
         })
         console.log('editedConfigs submitArr', submitArr);
