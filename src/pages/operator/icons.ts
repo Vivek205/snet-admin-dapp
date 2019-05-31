@@ -7,7 +7,8 @@ export const ICONS: ICONS = {
   default: "fab fa-intercom",
   tooltipInfo: "fas fa-info-circle",
   start: "fas fa-play-circle",
-  stop: "fas fa-stop-circle"
+  stop: "fas fa-stop-circle",
+  warning: "fas fa-exclamation"
 };
 
 interface ICONS {
@@ -20,5 +21,6 @@ interface ICONS {
   tooltipInfo: string;
   start: string;
   stop: string;
+  warning: string;
   [key: string]: string;
 }

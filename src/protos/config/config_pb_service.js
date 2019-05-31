@@ -1,4 +1,3 @@
-/* eslint-disable */
 // package: config
 // file: src/protos/config/config.proto
 
@@ -6,7 +5,7 @@ var src_protos_config_config_pb = require("../../../src/protos/config/config_pb"
 var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var ConfigurationService = (function () {
-  function ConfigurationService() { }
+  function ConfigurationService() {}
   ConfigurationService.serviceName = "config.ConfigurationService";
   return ConfigurationService;
 }());

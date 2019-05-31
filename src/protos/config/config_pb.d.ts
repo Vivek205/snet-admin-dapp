@@ -224,6 +224,9 @@ export class ConfigurationParameter extends jspb.Message {
   getSection(): string;
   setSection(value: string): void;
 
+  getDefaultvalue(): string;
+  setDefaultvalue(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ConfigurationParameter.AsObject;
   static toObject(
@@ -255,17 +258,19 @@ export namespace ConfigurationParameter {
     editable: boolean;
     restartDaemon: ConfigurationParameter.UpdateAction;
     section: string;
+    defaultvalue: string;
   };
 
   export enum Type {
     STRING = 0,
     INTEGER = 1,
     URL = 3,
-    BOOLEAN = 4
+    BOOLEAN = 4,
+    ADDRESS = 5
   }
 
   export enum UpdateAction {
-    RESTART = 0,
+    RESTART_REQUIRED = 0,
     NO_IMPACT = 1
   }
 }

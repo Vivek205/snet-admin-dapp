@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component, ReactNode, ReactElement } from "react";
 import StringInput from "./StringInput";
 import BooleanInput from "./BooleanInput";
 import {
@@ -115,8 +115,7 @@ class InputsContainer extends Component<IProps, IState> {
       isEmptyObject(this.state.booleans) &&
       isEmptyObject(this.state.strings)
     ) {
-      // return true;  revert back
-      return false;
+      return true;
     }
     return false;
   };
@@ -138,61 +137,51 @@ class InputsContainer extends Component<IProps, IState> {
             <List>
               {configs[activeSection] &&
                 configs[activeSection].map(
-                  (config: anyObject, index: number): ReactNode => {
-                    // ConfigType - Number
-                    if (config.type === 1) {
-                      return (
-                        <ListItem>
-                          <StringInput
-                            type="number"
-                            key={config.name}
-                            value={config.value}
-                            description={config.description}
-                            label={config.name}
-                            handleChange={this.handleStringChange}
-                            disabled={!config.editable}
-                          />
-                        </ListItem>
-                      );
-                    }
+                  (config: anyObject, index: number): ReactElement | void => {
                     // ConfigType - Boolean
                     if (config.type === 4) {
                       return (
                         <ListItem>
                           <BooleanInput
-                            checked={config.value}
+                            checked={
+                              typeof booleans[config.name] === "undefined"
+                                ? config.value
+                                : booleans[config.name]
+                            }
                             label={config.name}
                             description={config.description}
                             handleChange={this.handleBoolanChange}
+                            restart={config.restartDaemon === 1}
                             disabled={!config.editable}
+                            mandatory={config.mandatory}
                           />
                         </ListItem>
                       );
                     }
-                    // ConfigType - String or URL
-                    if (config.type === 0 || config.type == 3) {
-                      return (
-                        <ListItem>
-                          <StringInput
-                            key={config.name}
-                            value={
-                              typeof strings[config.name] === "undefined"
-                                ? config.value
-                                : strings[config.name]
-                            }
-                            description={config.description}
-                            label={config.name}
-                            handleChange={this.handleStringChange}
-                            disabled={!config.editable}
-                          />
-                        </ListItem>
-                      );
-                    }
+                    // ConfigType - String or URL or Number
+                    return (
+                      <ListItem>
+                        <StringInput
+                          type={config.type === 1 ? "number" : "string"}
+                          key={config.name}
+                          value={
+                            typeof strings[config.name] === "undefined"
+                              ? config.value
+                              : strings[config.name]
+                          }
+                          description={config.description}
+                          label={config.name}
+                          handleChange={this.handleStringChange}
+                          restart={config.restartDaemon === 1}
+                          disabled={!config.editable}
+                          mandatory={config.mandatory}
+                        />
+                      </ListItem>
+                    );
                   }
                 )}
             </List>
           </CardContent>
-          <CardActions className={classes.cardActions}></CardActions>
         </Card>
         <CssBaseline />
         <AppBar position="fixed" className={classes.footer} color="secondary">
@@ -206,7 +195,7 @@ class InputsContainer extends Component<IProps, IState> {
                 variant="contained"
                 color="secondary"
                 className={classes.button}
-                // onClick={this.handleCancel}
+                onClick={this.handleCancel}
                 disabled={this.shouldActionsBeDisabled()}
               >
                 Cancel
@@ -215,7 +204,7 @@ class InputsContainer extends Component<IProps, IState> {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                // onClick={this.handleSubmit}
+                onClick={this.handleSubmit}
                 disabled={this.shouldActionsBeDisabled()}
               >
                 Submit

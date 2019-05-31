@@ -12,7 +12,7 @@ import Zoom from "@material-ui/core/Zoom";
 const styles = {
   label: {
     fontSize: "1.5rem",
-    marginRight: 15
+    marginRight: 20
   },
   input: {
     fontSize: "2rem"
@@ -28,34 +28,70 @@ const styles = {
 
 interface IProps {
   classes: any;
-  type?: string;
+  type?: string | number;
   value: string;
   label: string;
   description: string;
-  handleChange(e: React.ChangeEvent<HTMLInputElement>, label: string): void;
+  handleChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    label: string,
+    type?: string | number
+  ): void;
   disabled?: boolean;
+  restart?: boolean;
+  mandatory?: boolean;
 }
 
 const StringInput: React.FC<IProps> = (props): ReactElement => {
-  const { classes, label, handleChange, value, description, disabled } = props;
+  const {
+    classes,
+    label: displayLabel,
+    handleChange,
+    value,
+    description,
+    disabled,
+    type,
+    restart,
+    mandatory
+  } = props;
   return (
     <div>
       <FormControlLabel
         labelPlacement="start"
         control={
-          <Input
-            className={classes.input}
-            // defaultValue={value}
-            value={value}
-            disabled={disabled}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-              handleChange(event, label)
-            }
-          />
+          <Fragment>
+            {restart ? (
+              <Tooltip
+                title="changing this value will cause the daemon to restart"
+                interactive
+                TransitionComponent={Zoom}
+                classes={{ tooltip: classes.tooltip }}
+              >
+                <Icon
+                  className={ICONS.warning}
+                  classes={{ root: classes.icon }}
+                  fontSize="small"
+                  color="error"
+                />
+              </Tooltip>
+            ) : (
+              ""
+            )}
+
+            <Input
+              className={classes.input}
+              // defaultValue={value}
+              value={value}
+              disabled={disabled}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+                handleChange(event, displayLabel, type)
+              }
+            />
+          </Fragment>
         }
         label={
           <Fragment>
-            {label}
+            {displayLabel}
             <Tooltip
               title={description}
               interactive
@@ -68,6 +104,23 @@ const StringInput: React.FC<IProps> = (props): ReactElement => {
                 fontSize="small"
               />
             </Tooltip>
+            {mandatory ? (
+              <Tooltip
+                title="This is a required field and cannot be left empty"
+                interactive
+                TransitionComponent={Zoom}
+                classes={{ tooltip: classes.tooltip }}
+              >
+                <Icon
+                  className={ICONS.mandatory}
+                  classes={{ root: classes.mandatoryIcon }}
+                  fontSize="small"
+                  color="error"
+                />
+              </Tooltip>
+            ) : (
+              ""
+            )}
             &nbsp;:
           </Fragment>
         }
@@ -81,7 +134,9 @@ const StringInput: React.FC<IProps> = (props): ReactElement => {
 
 StringInput.defaultProps = {
   type: "string",
-  disabled: false
+  disabled: false,
+  restart: false,
+  mandatory: false
 };
 
 export default withStyles(styles)(StringInput);

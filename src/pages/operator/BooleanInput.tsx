@@ -31,6 +31,8 @@ interface IProps {
   description: string;
   handleChange(e: React.ChangeEvent<HTMLInputElement>, label: string): void;
   disabled?: boolean;
+  restart?: boolean;
+  mandatory?: boolean;
 }
 
 const BooleanInput: React.FC<IProps> = (props): ReactElement => {
@@ -40,20 +42,42 @@ const BooleanInput: React.FC<IProps> = (props): ReactElement => {
     handleChange,
     classes,
     description,
-    disabled
+    disabled,
+    restart,
+    mandatory
   } = props;
   return (
     <FormControlLabel
       labelPlacement="start"
       control={
-        <Switch
-          checked={checked}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            handleChange(e, label)
-          }
-          value="checkedA"
-          disabled={disabled}
-        />
+        <Fragment>
+          {restart ? (
+            <Tooltip
+              title="changing this value will cause the daemon to restart"
+              interactive
+              TransitionComponent={Zoom}
+              classes={{ tooltip: classes.tooltip }}
+            >
+              <Icon
+                className={ICONS.warning}
+                classes={{ root: classes.icon }}
+                fontSize="small"
+                color="error"
+              />
+            </Tooltip>
+          ) : (
+            ""
+          )}
+
+          <Switch
+            checked={checked}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              handleChange(e, label)
+            }
+            value="checkedA"
+            disabled={disabled}
+          />
+        </Fragment>
       }
       label={
         <Fragment>
@@ -70,6 +94,23 @@ const BooleanInput: React.FC<IProps> = (props): ReactElement => {
               fontSize="small"
             />
           </Tooltip>
+          {mandatory ? (
+            <Tooltip
+              title="This is a required field and cannot be left empty"
+              interactive
+              TransitionComponent={Zoom}
+              classes={{ tooltip: classes.tooltip }}
+            >
+              <Icon
+                className={ICONS.mandatory}
+                classes={{ root: classes.mandatoryIcon }}
+                fontSize="small"
+                color="error"
+              />
+            </Tooltip>
+          ) : (
+            ""
+          )}
           &nbsp;:
         </Fragment>
       }
@@ -81,7 +122,9 @@ const BooleanInput: React.FC<IProps> = (props): ReactElement => {
 };
 
 BooleanInput.defaultProps = {
-  disabled: false
+  disabled: false,
+  restart: false,
+  mandatory: false
 };
 
 export default withStyles(styles)(BooleanInput);
