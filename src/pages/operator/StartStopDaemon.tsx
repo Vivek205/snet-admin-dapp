@@ -182,11 +182,6 @@ class StartStopDaemon extends Component<IProps, IState> {
       alertText,
       alertVariant
     } = this.state;
-
-    // const buttonClassname = classNames({
-    //     [classes.buttonSuccess]: success,
-    // }); http://34.197.167.102:8088
-
     return (
       <div className={classes.root}>
         <div className={classes.wrapper}>
