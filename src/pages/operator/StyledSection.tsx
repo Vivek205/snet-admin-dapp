@@ -15,20 +15,18 @@ interface IProps {
 const StyledSection: React.FC<IProps> = (props): ReactElement => {
   const { section, handleSectionChange } = props;
   return (
-    <>
-      <ListItem
-        button
-        key={section}
-        onClickCapture={(): void => {
-          handleSectionChange(section);
-        }}
-      >
-        <ListItemIcon>
-          <Icon className={ICONS[section] ? ICONS[section] : ICONS.default} />
-        </ListItemIcon>
-        <ListItemText primary={section} disableTypography />
-      </ListItem>
-    </>
+    <ListItem
+      button
+      key={section}
+      onClickCapture={(): void => {
+        handleSectionChange(section);
+      }}
+    >
+      <ListItemIcon>
+        <Icon className={ICONS[section] ? ICONS[section] : ICONS.default} />
+      </ListItemIcon>
+      <ListItemText primary={section} disableTypography />
+    </ListItem>
   );
 };
 
