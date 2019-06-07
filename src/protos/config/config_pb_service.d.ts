@@ -1,8 +1,9 @@
 // package: config
 // file: src/protos/config/config.proto
+/* eslint-disable */
 
 import * as src_protos_config_config_pb from "../../../src/protos/config/config_pb";
-import {grpc} from "@improbable-eng/grpc-web";
+import { grpc } from "@improbable-eng/grpc-web";
 
 type ConfigurationServiceGetConfiguration = {
   readonly methodName: string;
@@ -48,32 +49,42 @@ export class ConfigurationService {
   static readonly StartProcessingRequests: ConfigurationServiceStartProcessingRequests;
 }
 
-export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
-export type Status = { details: string, code: number; metadata: grpc.Metadata }
+export type ServiceError = {
+  message: string;
+  code: number;
+  metadata: grpc.Metadata;
+};
+export type Status = { details: string; code: number; metadata: grpc.Metadata };
 
 interface UnaryResponse {
   cancel(): void;
 }
 interface ResponseStream<T> {
   cancel(): void;
-  on(type: 'data', handler: (message: T) => void): ResponseStream<T>;
-  on(type: 'end', handler: () => void): ResponseStream<T>;
-  on(type: 'status', handler: (status: Status) => void): ResponseStream<T>;
+  on(type: "data", handler: (message: T) => void): ResponseStream<T>;
+  on(type: "end", handler: () => void): ResponseStream<T>;
+  on(type: "status", handler: (status: Status) => void): ResponseStream<T>;
 }
 interface RequestStream<T> {
   write(message: T): RequestStream<T>;
   end(): void;
   cancel(): void;
-  on(type: 'end', handler: () => void): RequestStream<T>;
-  on(type: 'status', handler: (status: Status) => void): RequestStream<T>;
+  on(type: "end", handler: () => void): RequestStream<T>;
+  on(type: "status", handler: (status: Status) => void): RequestStream<T>;
 }
 interface BidirectionalStream<ReqT, ResT> {
   write(message: ReqT): BidirectionalStream<ReqT, ResT>;
   end(): void;
   cancel(): void;
-  on(type: 'data', handler: (message: ResT) => void): BidirectionalStream<ReqT, ResT>;
-  on(type: 'end', handler: () => void): BidirectionalStream<ReqT, ResT>;
-  on(type: 'status', handler: (status: Status) => void): BidirectionalStream<ReqT, ResT>;
+  on(
+    type: "data",
+    handler: (message: ResT) => void
+  ): BidirectionalStream<ReqT, ResT>;
+  on(type: "end", handler: () => void): BidirectionalStream<ReqT, ResT>;
+  on(
+    type: "status",
+    handler: (status: Status) => void
+  ): BidirectionalStream<ReqT, ResT>;
 }
 
 export class ConfigurationServiceClient {
@@ -83,38 +94,61 @@ export class ConfigurationServiceClient {
   getConfiguration(
     requestMessage: src_protos_config_config_pb.ReadRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.ConfigurationResponse|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.ConfigurationResponse | null
+    ) => void
   ): UnaryResponse;
   getConfiguration(
     requestMessage: src_protos_config_config_pb.ReadRequest,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.ConfigurationResponse|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.ConfigurationResponse | null
+    ) => void
   ): UnaryResponse;
   updateConfiguration(
     requestMessage: src_protos_config_config_pb.UpdateRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.ConfigurationResponse|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.ConfigurationResponse | null
+    ) => void
   ): UnaryResponse;
   updateConfiguration(
     requestMessage: src_protos_config_config_pb.UpdateRequest,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.ConfigurationResponse|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.ConfigurationResponse | null
+    ) => void
   ): UnaryResponse;
   stopProcessingRequests(
     requestMessage: src_protos_config_config_pb.CommandRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.Response|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.Response | null
+    ) => void
   ): UnaryResponse;
   stopProcessingRequests(
     requestMessage: src_protos_config_config_pb.CommandRequest,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.Response|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.Response | null
+    ) => void
   ): UnaryResponse;
   startProcessingRequests(
     requestMessage: src_protos_config_config_pb.CommandRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.Response|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.Response | null
+    ) => void
   ): UnaryResponse;
   startProcessingRequests(
     requestMessage: src_protos_config_config_pb.CommandRequest,
-    callback: (error: ServiceError|null, responseMessage: src_protos_config_config_pb.Response|null) => void
+    callback: (
+      error: ServiceError | null,
+      responseMessage: src_protos_config_config_pb.Response | null
+    ) => void
   ): UnaryResponse;
 }
-
