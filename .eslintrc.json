@@ -1,3 +1,16 @@
 {
-  "extends": ["react-app", "plugin:prettier/recommended"]
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react", "prettier"],
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": false }],
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/interface-name-prefix": 0
+  }
 }
