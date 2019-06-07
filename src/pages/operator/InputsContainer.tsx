@@ -8,6 +8,7 @@ import {
   stringObject
 } from "../../typeScript/interfaces";
 import { isEmptyObject } from "../../utilities/util";
+import { isValidNumber } from "../../utilities/validation";
 
 // MaterialUI Imports
 import List from "@material-ui/core/List";
@@ -89,10 +90,18 @@ class InputsContainer extends Component<IProps, IState> {
 
   private handleStringChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    name: string
+    name: string,
+    type: string | number
   ): void => {
+    let value: string | boolean | number = event.currentTarget.value;
+    if (type === "number") {
+      value = isValidNumber(value);
+    } // validate number
+    if (!value) {
+      return;
+    } // return if the value validated is false
     let strings: stringObject = { ...this.state.strings };
-    strings[name] = event.currentTarget.value;
+    strings[name] = value.toString();
     this.setState({ strings });
   };
 

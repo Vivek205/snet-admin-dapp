@@ -19,10 +19,15 @@ const styles = {
   },
   icon: {
     verticalAlign: "middle",
-    marginLeft: 5
+    marginLeft: 5,
+    width: 24
   },
   tooltip: {
     fontSize: "1.5rem"
+  },
+  mandatoryIcon: {
+    fontSize: 8,
+    verticalAlign: "text-top"
   }
 };
 

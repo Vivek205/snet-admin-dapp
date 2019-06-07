@@ -8,6 +8,7 @@ let regStringNumber: RegExp = /^[A-Za-z0-9]*$/;
 let regStringNumberWithSpace: RegExp = /^[A-Za-z0-9 ]*$/;
 let regURL: RegExp = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
 
+/** validate the string with custom RegExp */
 const isValid = (value: string, regex: RegExp): boolean => {
     if (regex.test(value)) {
         return true;
@@ -15,28 +16,27 @@ const isValid = (value: string, regex: RegExp): boolean => {
     return false;
 }
 
-
-export const validate = (value: string, type: number | string): boolean => {
-    switch (type) {
-        case 0:
-        case 'string': {
-            return isValid(value, regStringWithSpace);
-        }
-        case 1:
-        case 'number': {
-            return isValid(value, regNumber);
-        }
-        case 3:
-        case 'URL': {
-            return isValid(value, regURL);
-        }
-        case 5:
-        case 'address': {
-            return isValid(value, regStringNumber);
-        }
-        default: {
-            return false
-        }
-    }
-
+/**return: whether the string is a valid number */
+export const isValidNumber = (value: string): boolean | string | number => {
+    let trimmed: number = parseFloat(value.trim());
+    if (isNaN(trimmed)) {
+        return false;
+    };
+    return trimmed;
 }
+
+/** value: string to validated
+ *  allowedChars: array of special characters to be allowed explicitly
+ *  return string without any special characters except the allowed ones
+ */
+export const removeSplChars = (value: string, allowedChars?: string[]) => {
+    let reg = /[^0-9a-zA-Z]/;
+    if (allowedChars !== undefined) {
+        reg = new RegExp(`[^0-9a-zA-z\\${allowedChars.join('\\')}]`);
+    }
+    console.log('regex', reg);
+    let removed = value.replace(reg, '');
+    return removed;
+}
+
+

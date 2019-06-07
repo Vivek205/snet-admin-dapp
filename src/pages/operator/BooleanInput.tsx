@@ -20,7 +20,12 @@ const styles = {
   },
   icon: {
     verticalAlign: "middle",
-    marginLeft: 5
+    marginLeft: 5,
+    width: 24
+  },
+  mandatoryIcon: {
+    fontSize: 8,
+    verticalAlign: "text-top"
   }
 };
 
