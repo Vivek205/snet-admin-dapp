@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ReactNode } from "react";
 
 import { grpc } from "@improbable-eng/grpc-web";
 import { Code } from "../../typeScript/grpc";
@@ -173,7 +173,7 @@ class StartStopDaemon extends Component<IProps, IState> {
     this.setState({ showAlert: false });
   };
 
-  public render(): any {
+  public render(): ReactNode {
     const { classes } = this.props;
     const {
       loading,
