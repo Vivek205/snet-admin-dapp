@@ -110,7 +110,7 @@ class InputsContainer extends Component<IProps, IState> {
     this.props.handleSubmit(submitObj);
   };
 
-  private shouldActionsDisabled = (): boolean => {
+  private shouldActionsBeDisabled = (): boolean => {
     if (
       isEmptyObject(this.state.booleans) &&
       isEmptyObject(this.state.strings)
@@ -207,7 +207,7 @@ class InputsContainer extends Component<IProps, IState> {
                 color="secondary"
                 className={classes.button}
                 // onClick={this.handleCancel}
-                disabled={this.shouldActionsDisabled()}
+                disabled={this.shouldActionsBeDisabled()}
               >
                 Cancel
               </Button>
@@ -216,7 +216,7 @@ class InputsContainer extends Component<IProps, IState> {
                 color="primary"
                 className={classes.button}
                 // onClick={this.handleSubmit}
-                disabled={this.shouldActionsDisabled()}
+                disabled={this.shouldActionsBeDisabled()}
               >
                 Submit
               </Button>
