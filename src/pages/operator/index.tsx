@@ -25,6 +25,7 @@ import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import CommonAlert from "../CommonAlert";
 
 interface IProps {
   classes: anyObject;
@@ -38,6 +39,9 @@ interface IState {
   showLoader: boolean;
   daemonEndpoint: string;
   showError: boolean;
+  showAlert: boolean;
+  alertText: string;
+  alertVariant: string;
 }
 
 export interface Menu {
@@ -83,7 +87,10 @@ class Operator extends Component<IProps, IState> {
     sections: [],
     showLoader: true,
     daemonEndpoint: "",
-    showError: false
+    showError: false,
+    showAlert: false,
+    alertVariant: "success",
+    alertText: ""
   };
 
   private handleSectionChange = (activeSection: string): void => {
@@ -225,9 +232,22 @@ class Operator extends Component<IProps, IState> {
     }
   };
 
+  private handleAlertClose = (): void => {
+    this.setState({ showAlert: false });
+  };
+
   public render(): ReactNode {
     const { classes, network } = this.props;
-    const { activeSection, configs, showLoader, daemonEndpoint } = this.state;
+    const {
+      activeSection,
+      configs,
+      showLoader,
+      daemonEndpoint,
+      showError,
+      showAlert,
+      alertText,
+      alertVariant
+    } = this.state;
     if (daemonEndpoint === "") {
       return (
         <GetDaemonEndpoint handleDaemonEndpoint={this.handleDaemonEndpoint} />
@@ -273,6 +293,12 @@ class Operator extends Component<IProps, IState> {
             </Typography>
           </main>
         </div>
+        <CommonAlert
+          alertText={alertText}
+          alertVariant={alertVariant}
+          showAlert={showAlert}
+          handleAlertClose={this.handleAlertClose}
+        />
       </div>
     );
   }
