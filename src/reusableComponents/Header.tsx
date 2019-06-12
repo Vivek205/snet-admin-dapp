@@ -80,11 +80,9 @@ class Header extends Component<IProps> {
             <div className="header">
               <div className="desktop-header">
                 <div className="col-xs-5 col-sm-4 col-md-3 col-lg-5 logo">
-                  <Link to="/SampleServices">
-                    <h1>
-                      <span className="icon-logo"></span>
-                    </h1>
-                  </Link>
+                  <h1>
+                    <span className="icon-logo"></span>
+                  </h1>
                 </div>
                 {networkName}
                 <div className="col-xs-4 col-sm-4 col-md-6 col-lg-5 navigation">
