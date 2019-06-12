@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { NETWORKS } from "../utilities/networks";
+import { NETWORKS, NetworksEnum } from "../utilities/networks";
 
 interface IProps {
   chainId: number;
@@ -25,10 +25,9 @@ class Header extends Component<IProps> {
     const menuList = <ul></ul>;
 
     const networkName =
-      typeof NETWORKS[this.props.chainId] !== "undefined" &&
-      typeof NETWORKS[this.props.chainId].name !== "undefined" ? (
+      typeof NETWORKS[this.props.chainId] !== "undefined" ? (
         <div className="col-xs-3 col-sm-4 col-md-3 col-lg-2 network-name">
-          {NETWORKS[this.props.chainId].name}
+          {NETWORKS[this.props.chainId]}
         </div>
       ) : (
         <div className="col-xs-3 col-sm-4 col-md-3 col-lg-2 network-name" />
