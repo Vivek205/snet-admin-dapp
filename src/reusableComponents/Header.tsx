@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { NETWORKS, NetworksEnum } from "../utilities/networks";
+import { NETWORKS } from "../utilities/networks";
 
 interface IProps {
   chainId: number;
